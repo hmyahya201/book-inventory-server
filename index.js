@@ -32,13 +32,27 @@ async function run() {
       res.send(result)
     })
 
+    app.get('/edit-book/:id', async(req, res)=>{
+      const id = req.params.id
+      const filter = {_id: new ObjectId(id)}
+      const result = await bookCollection.findOne(filter)
+      res.send(result)
+    })
+    
+    app.get('/book-details/:id', async(req, res)=>{
+      const id = req.params.id
+      const filter = {_id: new ObjectId(id)}
+      const result = await bookCollection.findOne(filter)
+      res.send(result)
+    })
+
     app.post('/upload-book', async(req, res)=>{
       const data = req.body
       const result = await bookCollection.insertOne(data)
       res.send(result)
     })
 
-    app.patch('/update/:id', async(req, res)=>{
+    app.patch('/update-book/:id', async(req, res)=>{
       const id = req.params.id
       const filter = {_id: new ObjectId(id)}
       const updateBook = req.body
@@ -49,11 +63,16 @@ async function run() {
       res.send(result)
     })
 
-    app.delete('/delete/:id', async(req, res)=>{
-      const id = req.params.id;
+    app.delete('/delete-book/:id', async(req, res)=>{
+      try{
+         const id = req.params.id;
       const filter = {_id: new ObjectId(id)}
       const result = await bookCollection.deleteOne(filter)
       res.send(result)
+      }
+      catch{
+         res.send(erro.message)
+      }
     })
 
     app
@@ -67,10 +86,6 @@ async function run() {
   }
 }
 run().catch(console.dir);
-
-
-
-
 
 app.get('/', (req, res)=>{
    res.send("Hello world this is my book-inventory")
